@@ -3,7 +3,7 @@ import pandas as pd
 import joblib
 
 # Load Saved Model
-model = joblib.load("xgboost_pipeline.pkl")
+model = joblib.load("linear_regression_pipeline.pkl")
 
 # Page Configuration
 st.set_page_config(
