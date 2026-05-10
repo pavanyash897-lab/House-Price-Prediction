@@ -3,7 +3,7 @@ import pandas as pd
 import joblib
 
 # Load Saved Model
-model = joblib.load("linear_regression_pipeline.pkl")
+model = joblib.load("xgboost_pipeline.pkl")
 
 # Page Configuration
 st.set_page_config(
@@ -87,7 +87,6 @@ if st.button("Predict House Price"):
         f"🏡 Estimated House Price: ₹ {prediction[0]:,.2f}"
     )
 
-    st.balloons()
 
 # Footer
 st.markdown("---")
