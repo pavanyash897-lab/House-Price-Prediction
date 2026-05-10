@@ -19,17 +19,6 @@ st.write(
     "Enter house details below to predict the estimated price."
 )
 
-# Sidebar
-st.sidebar.header("About Project")
-
-st.sidebar.info(
-    """
-    Machine Learning based House Price Prediction System.
-
-    Final Model:
-    XGBoost Regressor
-    """
-)
 
 # User Inputs
 square_footage = st.number_input(
@@ -92,5 +81,5 @@ if st.button("Predict House Price"):
 st.markdown("---")
 
 st.caption(
-    "Developed using Streamlit, Scikit-Learn, and XGBoost"
+    "Developed using Streamlit"
 )
