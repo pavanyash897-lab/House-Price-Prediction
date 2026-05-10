@@ -1,36 +1,97 @@
-import pickle
 import streamlit as st
-import numpy as np
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
+import joblib
 
-st.title('House Price Prediction')
+# Load Saved Model
+model = joblib.load("xgboost_pipeline.pkl")
 
-# load model
-model = pickle.load(open('Linear_model.pkl','rb'))
+# Page Configuration
+st.set_page_config(
+    page_title="House Price Prediction",
+    page_icon="🏠",
+    layout="centered"
+)
 
-# input features
-Square_Footage = st.number_input('Square Footage', min_value=503.0, max_value=4999.0, value=503.0)
-Num_Bedrooms = st.number_input('Num Bedrooms', min_value=1, max_value=5, value=1)
-Year_Built = st.number_input('Year Built', min_value=1950, max_value=2022, value=2010)
-Lot_Size = st.number_input('Lot Size', min_value=0.506058, max_value=4.98, value=1.0)
-Garage_Size = st.number_input('Garage Size', min_value=0, max_value=2, value=0)
+# Title
+st.title("🏠 House Price Prediction")
 
+st.write(
+    "Enter house details below to predict the estimated price."
+)
 
-# create dataframe (MATCH TRAINING COLUMN NAMES EXACTLY)
-input_data = pd.DataFrame({
-    'Square_Footage': [Square_Footage],
-    'Num_Bedrooms': [Num_Bedrooms],
-    'Year_Built': [Year_Built],
-    'Lot_Size': [Lot_Size],
-    'Garage_Size': [Garage_Size],
-})
-scaler=StandardScaler()
-input_data[['Square_Footage','Num_Bedrooms','Lot_Size','Garage_Size']]=scaler.fit_transform(input_data[['Square_Footage','Num_Bedrooms','Lot_Size','Garage_Size']])
+# Sidebar
+st.sidebar.header("About Project")
 
-# prediction
-if st.button('Predict'):
-    predictions = model.predict(input_data)
-    output = round(predictions[0], 2)
-    st.success(f'Predicted House Price: {output}')
+st.sidebar.info(
+    """
+    Machine Learning based House Price Prediction System.
 
+    Final Model:
+    XGBoost Regressor
+    """
+)
+
+# User Inputs
+square_footage = st.number_input(
+    "Square Footage",
+    min_value=500,
+    max_value=5000,
+    value=2800
+)
+
+num_bedrooms = st.slider(
+    "Number of Bedrooms",
+    min_value=1,
+    max_value=5,
+    value=3
+)
+
+year_built = st.number_input(
+    "Year Built",
+    min_value=1950,
+    max_value=2022,
+    value=2000
+)
+
+lot_size = st.slider(
+    "Lot Size",
+    min_value=0.5,
+    max_value=5.0,
+    value=2.5
+)
+
+garage_size = st.slider(
+    "Garage Size",
+    min_value=0,
+    max_value=2,
+    value=1
+)
+
+# Prediction
+if st.button("Predict House Price"):
+
+    # Create Input DataFrame
+    input_data = pd.DataFrame([{
+        'Square_Footage': square_footage,
+        'Num_Bedrooms': num_bedrooms,
+        'Year_Built': year_built,
+        'Lot_Size': lot_size,
+        'Garage_Size': garage_size
+    }])
+
+    # Predict
+    prediction = model.predict(input_data)
+
+    # Show Result
+    st.success(
+        f"🏡 Estimated House Price: ₹ {prediction[0]:,.2f}"
+    )
+
+    st.balloons()
+
+# Footer
+st.markdown("---")
+
+st.caption(
+    "Developed using Streamlit, Scikit-Learn, and XGBoost"
+)
